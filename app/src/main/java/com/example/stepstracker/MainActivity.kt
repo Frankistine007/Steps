@@ -16,11 +16,7 @@ import androidx.core.app.ActivityCompat
 
 
 class MainActivity : AppCompatActivity(), SensorEventListener {
-    // Added SensorEventListener the MainActivity class
-    // Implement all the members in the class MainActivity
-    // after adding SensorEventListener
-
-    // we have assigned sensorManger to nullable
+    
     private var sensorManager: SensorManager? = null
 
 
@@ -40,7 +36,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         loadData()
         resetSteps()
 
-        // Adding a context of SENSOR_SERVICE as Sensor Manager
+    
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
     }
 
@@ -48,9 +44,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         super.onResume()
         running = true
 
-        // Returns the number of steps taken by the user since the last reboot while activated
-        // This sensor requires permission android.permission.ACTIVITY_RECOGNITION.
-        // So don't forget to add the following permission in AndroidManifest.xml present in manifest folder of the app.
+        
         val stepSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
 
 
@@ -69,11 +63,10 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         if (running) {
             totalSteps = event!!.values[0]
 
-            // Current steps are calculated by taking the difference of total steps
-            // and previous steps
+            
             val currentSteps = totalSteps.toInt() - previousTotalSteps.toInt()
 
-            // It will show the current steps to the user
+            
             tvStepsTaken.text = ("$currentSteps")
         }
     }
@@ -84,10 +77,10 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         resetBtn.setOnClickListener {
             previousTotalSteps = totalSteps
 
-            // the steps will be reset to 0
+            
             tvStepsTaken.text = 0.toString()
 
-            // This will save the data
+            
             saveData()
 
 
@@ -97,9 +90,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     private fun saveData() {
 
-        // Shared Preferences will allow us to save
-        // and retrieve data in the form of key,value pair.
-        // In this function we will save data
+       
         val sharedPreferences = getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
 
         val editor = sharedPreferences.edit()
@@ -109,18 +100,18 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     private fun loadData() {
 
-        // In this function we will retrieve data
+       
         val sharedPreferences = getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
         val savedNumber = sharedPreferences.getFloat("key1", 0f)
 
-        // Log.d is used for debugging purposes
+
         Log.d("MainActivity", "$savedNumber")
 
         previousTotalSteps = savedNumber
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-        // We do not have to write anything in this function for this app
+        
     }
 
     private fun hasActivityRecognition() = ActivityCompat.checkSelfPermission(this,android.Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_GRANTED
